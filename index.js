@@ -7,9 +7,10 @@ module.exports = function (file, options, cb) {
     var er = ers[i];
     if (!er.fatal && er.severity < 2) continue;
     return cb(new Error(
-      file.path + ': ' + er.message + ' (' + (er.ruleId || 'fatal') + ')\n' +
-      er.line + ': ' + er.source + '\n' +
-      (new Array(er.column + er.line.toString().length + 2)).join('.') + '^'
+      file.path + ': line ' + er.line + ', column ' + er.column + ', ' +
+      er.message + ' (' + (er.ruleId || 'fatal') + ')\n' +
+      '> ' + er.line + ' | ' + (er.source || '') + '\n' +
+      (new Array(er.column + er.line.toString().length + 6)).join(' ') + '^'
     ));
   }
   cb(null, {});
