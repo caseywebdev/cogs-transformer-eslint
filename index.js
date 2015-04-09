@@ -11,8 +11,9 @@ module.exports = function (file, options, cb) {
       er.message + ' (' + (er.ruleId || 'fatal') + ')' +
       (
         er.source ?
-        '\n> ' + er.line + ' | ' + er.source + '\n' +
-        (new Array(6 + er.line.toString().length + er.column)).join(' ') + '^' :
+        '\n> ' + er.line + ' | ' + er.source + '\n  ' +
+        (new Array(er.line.toString().length + 1)).join(' ') + ' | ' +
+        (new Array(er.column + 1)).join(' ') + '^' :
         ''
       )
     ));
