@@ -1,6 +1,6 @@
 {
   "name": "cogs-transformer-eslint",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Casey Foster <c@sey.me>",
   "description": "An eslint validator for Cogs.",
   "license": "MIT",

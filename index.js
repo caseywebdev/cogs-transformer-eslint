@@ -2,6 +2,7 @@ var eslint = require('eslint');
 
 module.exports = function (file, options, cb) {
   var cli = new eslint.CLIEngine(options);
+  if (cli.isPathIgnored(file.path)) return cb(null, {});
   var ers = cli.executeOnText(file.buffer.toString()).results[0].messages;
   var i, l, er;
   for (i = 0, l = ers.length; i < l; ++i) {

@@ -24,6 +24,17 @@ helper.run({
       links: [],
       globs: []
     },
+    'test/ignore.js': {
+      path: 'test/ignore.js',
+      buffer: helper.getFileBuffer('test/ignore.js'),
+      hash: helper.getFileHash('test/ignore.js'),
+      requires: [{
+        path: 'test/ignore.js',
+        hash: helper.getFileHash('test/ignore.js')
+      }],
+      links: [],
+      globs: []
+    },
     'test/error.js': Error,
     'test/error2.js': Error
   }
