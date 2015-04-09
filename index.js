@@ -8,9 +8,13 @@ module.exports = function (file, options, cb) {
     if (!er.fatal && er.severity < 2) continue;
     return cb(new Error(
       file.path + ': line ' + er.line + ', column ' + er.column + ', ' +
-      er.message + ' (' + (er.ruleId || 'fatal') + ')\n' +
-      '> ' + er.line + ' | ' + (er.source || '') + '\n' +
-      (new Array(er.column + er.line.toString().length + 6)).join(' ') + '^'
+      er.message + ' (' + (er.ruleId || 'fatal') + ')' +
+      (
+        er.source ?
+        '\n> ' + er.line + ' | ' + er.source + '\n' +
+        (new Array(6 + er.line.toString().length + er.column)).join(' ') + '^' :
+        ''
+      )
     ));
   }
   cb(null, {});
