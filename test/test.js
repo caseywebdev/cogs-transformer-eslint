@@ -37,5 +37,8 @@ helper.run({
     },
     'test/error.js': Error,
     'test/error2.js': Error
+  },
+  'test/error3/config.json': {
+    'test/error3/error.js': Error
   }
 });
