@@ -1,16 +1,12 @@
 {
-  "in": {
-    "js": {
-      "transformers": {
-        "name": ".",
-        "options": {
-          "useEslintrc": false,
-          "envs": ["browser"],
-          "rules": {
-            "no-unused-vars": 2,
-            "quotes": [1, "single", "avoid-escape"]
-          }
-        }
+  "pipe": {
+    "name": ".",
+    "options": {
+      "useEslintrc": false,
+      "envs": ["browser"],
+      "rules": {
+        "no-unused-vars": 2,
+        "quotes": [1, "single", "avoid-escape"]
       }
     }
   }
