@@ -15,7 +15,7 @@ module.exports = ({file: {buffer, path}, options}) => {
         er.source ?
         `\n> ${er.line} | ${er.source}\n  ` +
         `${(new Array(er.line.toString().length + 1)).join(' ')} | ` +
-        `${(new Array(er.column + 1)).join(' ')}^` :
+        `${(new Array(er.column)).join(' ')}^` :
         ''
       )
     );
