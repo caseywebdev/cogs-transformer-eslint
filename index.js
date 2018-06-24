@@ -1,23 +1,41 @@
 const eslint = require('eslint');
 
+const repeat = (str, times) => (new Array(times)).join(str);
+
 module.exports = ({file: {buffer, path}, options}) => {
-  const cli = new eslint.CLIEngine(options);
+  const cli = new eslint.CLIEngine(Object.assign(options));
   if (cli.isPathIgnored(path)) return;
 
-  const ers = cli.executeOnText(buffer.toString(), path).results[0].messages;
-  for (let i = 0, l = ers.length; i < l; ++i) {
-    const er = ers[i];
-    if (!er.fatal && er.severity < 2) continue;
+  const source = buffer.toString();
+  const sourceLines = source.split(/\r?\n/);
+  cli.executeOnText(source, path).results[0].messages.forEach(({
+    column,
+    fatal,
+    line,
+    message,
+    ruleId,
+    severity,
+    endColumn = column,
+    endLine = line
+  }) => {
+    if (!fatal && severity < 2) return;
+
+    let highlight = '';
+    const space = endLine.toString().length;
+    for (let i = line; i <= endLine; ++i) {
+      const sourceLine = sourceLines[i - 1];
+      const start = i === line ? column : 1;
+      const end = i === endLine ? endColumn : sourceLine.length + 1;
+      highlight +=
+        `\n> ${repeat(' ', space - i.toString().length)}${i} | ${sourceLine}` +
+        `\n  ${repeat(' ', space)}  | ` +
+        repeat(' ', start) + repeat('^', end - start + 1);
+    }
+
     throw new Error(
-      `${path}: line ${er.line}, column ${er.column}, ` +
-      `${er.message}  (${er.ruleId || 'fatal'})` +
-      (
-        er.source ?
-        `\n> ${er.line} | ${er.source}\n  ` +
-        `${(new Array(er.line.toString().length + 1)).join(' ')} | ` +
-        `${(new Array(er.column)).join(' ')}^` :
-        ''
-      )
+      `${path} [${line}:${column} - ${endLine}:${endColumn}] ` +
+      `${message} (${ruleId || 'fatal'})` +
+      highlight
     );
-  }
+  });
 };
