@@ -1,6 +1,6 @@
 const eslint = require('eslint');
 
-const repeat = (str, times) => (new Array(times)).join(str);
+const repeat = (str, times) => (new Array(times + 1)).join(str);
 
 module.exports = ({file: {buffer, path}, options}) => {
   const cli = new eslint.CLIEngine(Object.assign(options));
@@ -24,12 +24,23 @@ module.exports = ({file: {buffer, path}, options}) => {
     const space = endLine.toString().length;
     for (let i = line; i <= endLine; ++i) {
       const sourceLine = sourceLines[i - 1];
-      const start = i === line ? column : 1;
-      const end = i === endLine ? endColumn : sourceLine.length + 1;
+      const start = i === line ? column - 1 : 0;
+      const end = i === endLine ? endColumn - 1 : sourceLine.length;
+
+      if (i === line) {
+        highlight +=
+          `\n  ${repeat(' ', space)} | ` +
+          repeat(' ', start) + repeat('v', Math.max(end - start, 1));
+      }
+
       highlight +=
-        `\n> ${repeat(' ', space - i.toString().length)}${i} | ${sourceLine}` +
-        `\n  ${repeat(' ', space)}  | ` +
-        repeat(' ', start) + repeat('^', end - start + 1);
+        `\n> ${repeat(' ', space - i.toString().length)}${i} | ${sourceLine}`;
+
+      if (i === endLine) {
+        highlight +=
+          `\n  ${repeat(' ', space)} | ` +
+          repeat(' ', start) + repeat('^', Math.max(end - start, 1));
+      }
     }
 
     throw new Error(
